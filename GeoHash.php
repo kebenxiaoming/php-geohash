@@ -92,14 +92,14 @@ class GeoHash {
         if ($length == 0) {
             return '';
         }
-        $lastChar = $hash{$length - 1};
+        $lastChar = $hash[$length - 1];
         $evenOrOdd = ($length - 1) % 2;
         $baseHash = substr($hash, 0, -1);
         if (strpos($this->_borderChars[$evenOrOdd][$direction], $lastChar) !== false) {
             $baseHash = $this->_calcNeighbor($baseHash, $direction);
         }
-        if (isset($baseHash{0})) {
-            return $baseHash . $this->_neighborChars[$evenOrOdd][$direction]{strpos($this->_charPool, $lastChar)};
+        if (isset($baseHash[0])) {
+            return $baseHash . $this->_neighborChars[$evenOrOdd][$direction][strpos($this->_charPool, $lastChar)];
         } else {
             return '';
         }
@@ -141,7 +141,7 @@ class GeoHash {
         $middle = ($min + $max) / 2;
         $binLength = strlen($binData);
         for ($i = 0; $i < $binLength; ++$i) {
-            if ($binData{$i} == '0') {
+            if ($binData[$i] == '0') {
                 $max = $middle;
                 $middle = ($min + $middle) / 2;
             } else {
@@ -162,8 +162,8 @@ class GeoHash {
     private function _binCombine($binFirst, $binSecond) {
         $result = '';
         $i = 0;
-        while (isset($binFirst{$i}) || isset($binSecond{$i})) {
-            $result .= (isset($binFirst{$i}) ? $binFirst{$i} : '') . (isset($binSecond{$i}) ? $binSecond{$i} : '');
+        while (isset($binFirst[$i]) || isset($binSecond[$i])) {
+            $result .= (isset($binFirst[$i]) ? $binFirst[$i] : '') . (isset($binSecond[$i]) ? $binSecond[$i] : '');
             ++$i;
         }
         return $result;
@@ -181,7 +181,7 @@ class GeoHash {
         );
         $binLength = strlen($binData);
         for ($i = 0; $i < $binLength; ++$i) {
-            $result[$i % 2] .= $binData{$i};
+            $result[$i % 2] .= $binData[$i];
         }
         return $result;
     }
@@ -204,7 +204,7 @@ class GeoHash {
         }
         for ($i = 0; $i < $binLength; $i += 5) {
             $tmp = substr($binData, $i, 5);
-            $result .= $this->_charPool{bindec($tmp)};
+            $result .= $this->_charPool[bindec($tmp)];
         }
         return $result;
     }
@@ -218,7 +218,7 @@ class GeoHash {
         $len = strlen($base32Data);
         $result = '';
         for ($i = 0; $i < $len; ++$i) {
-            $result .= $this->_charPoolBin[$base32Data{$i}];
+            $result .= $this->_charPoolBin[$base32Data[$i]];
         }
         return $result;
     }
